@@ -3,8 +3,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".sleeptracker.SleepTrackerFragment">
 
     <!-- 通過數據綁定可用於XML的數據。 在這種情況下，

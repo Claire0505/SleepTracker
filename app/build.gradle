@@ -1,7 +1,8 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+// 使用Navigation Safe Args插件 (取代 Bundle 傳遞數據)
+apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 30
@@ -15,6 +16,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 從Android支持庫23.3.0開始，支持向量drawable只能通過加載app:srcCompat
+        // 矢量繪圖允許您使用XML定義的單個矢量圖形替換多個png資源。
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -48,4 +52,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
 }
