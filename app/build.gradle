@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 // 使用Navigation Safe Args插件 (取代 Bundle 傳遞數據)
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -56,5 +57,21 @@ dependencies {
     // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
+    // Room and Lifecycle dependencies
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 
 }
