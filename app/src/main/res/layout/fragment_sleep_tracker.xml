@@ -7,9 +7,13 @@
 
     <!-- 通過數據綁定可用於XML的數據。 在這種情況下，
     整個ViewModel，以便我們可以訪問LiveData，
-    單擊處理程序和狀態變量。 -->
+    單擊處理程序和狀態變量。
+    基本安裝ViewModel到位後，
+    您需要在中完成設置數據綁定SleepTrackerFragment以將ViewModelUI與UI連接起來。-->
     <data>
-
+        <variable
+            name="sleepTrackerViewModel"
+            type="com.example.trackmysleepquality.sleeptracker.SleepTrackerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
