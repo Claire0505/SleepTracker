@@ -12,7 +12,7 @@ import androidx.room.*
 @Dao
 interface SleepDatabaseDAO {
     @Insert
-    fun insert(night: SleepNight)
+    suspend fun insert(night: SleepNight)
 
     /**
      * When updating a row with a value already set in a column,
@@ -21,7 +21,7 @@ interface SleepDatabaseDAO {
      * @param night new value to write
      */
     @Update
-    fun update(night: SleepNight)
+    suspend fun update(night: SleepNight)
 
     /**
      * Selects and returns the row that matches the supplied start time, which is our key.
@@ -29,7 +29,7 @@ interface SleepDatabaseDAO {
      * @param key startTimeMilli to match
      */
     @Query("SELECT * FROM daily_sleep_quality_table WHERE nightId = :key")
-    fun get(key: Long): SleepNight?
+    suspend fun get(key: Long): SleepNight?
 
     /**
      * Deletes all values from the table.
@@ -45,7 +45,7 @@ interface SleepDatabaseDAO {
      * 按降序排列的結果列表的第一個元素。用於LIMIT 1僅返回一個元素。
      */
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
-    fun getTonight() : SleepNight?
+    suspend fun getTonight() : SleepNight?
 
     /**
      * Selects and returns all rows in the table,
