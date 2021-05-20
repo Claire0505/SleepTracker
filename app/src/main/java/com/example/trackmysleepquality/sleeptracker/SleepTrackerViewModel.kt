@@ -54,7 +54,7 @@ class SleepTrackerViewModel(
      * Executes when the START button is clicked.
      * 在內部onStartTracking()，在中啟動協程viewModelScope，因為您需要此結果才能繼續並更新UI。
      */
-    fun onStartTracker(){
+    fun onStartTracking(){
         viewModelScope.launch {
             // Create a new night, which captures the current time,
             // and insert it into the database.
@@ -65,5 +65,34 @@ class SleepTrackerViewModel(
 
     private suspend fun insert(night: SleepNight) {
         database.insert(night)
+    }
+
+    /**
+     * Executes when the STOP button is clicked.
+     */
+    fun onStopTracking(){
+        viewModelScope.launch {
+            val oldNight = tonight.value ?: return@launch
+            oldNight.endTimeMilli = System.currentTimeMillis()
+            update(oldNight)
+        }
+    }
+
+    private suspend fun update (night: SleepNight){
+        database.update(night)
+    }
+
+    /**
+     * Executes when the CLEAR button is clicked.
+     */
+    fun onClear(){
+        viewModelScope.launch {
+            clear()
+            tonight.value = null
+        }
+    }
+
+    suspend fun clear() {
+        database.clear()
     }
 }
