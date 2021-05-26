@@ -1,7 +1,9 @@
 package com.example.trackmysleepquality.sleeptracker
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.trackmysleepquality.convertLongToDateString
 import com.example.trackmysleepquality.database.SleepDatabaseDAO
 import com.example.trackmysleepquality.database.SleepNight
 import com.example.trackmysleepquality.formatNights
@@ -57,6 +59,10 @@ class SleepTrackerViewModel(
             // and insert it into the database.
             val newNight = SleepNight()
             insert(newNight)
+
+            tonight.value = getTonightFromDatabase()
+
+            Log.i("TAG", "onStartTracking: ${convertLongToDateString(newNight.startTimeMilli)}")
         }
     }
 
@@ -67,13 +73,23 @@ class SleepTrackerViewModel(
     /**
      * Executes when the STOP button is clicked.
      */
-    fun onStopTracking(){
+    fun onStopTracking() {
         viewModelScope.launch {
+            // In Kotlin, the return@label syntax is used for specifying which function among
+            // several nested ones this statement returns from.
+            // In this case, we are specifying to return from launch(),
+            // not the lambda.
             val oldNight = tonight.value ?: return@launch
+
+            // Update the night in the database to add the end time.
             oldNight.endTimeMilli = System.currentTimeMillis()
+
             update(oldNight)
-            // 設置狀態以導航到SleepQualityFragment
+
+            // Set state to navigate to the SleepQualityFragment.
             _navigateToSleepQuality.value = oldNight
+
+            Log.i("TAG", "onStopTracking: ${convertLongToDateString(oldNight.endTimeMilli)}")
         }
     }
 

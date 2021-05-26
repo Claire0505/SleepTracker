@@ -45,7 +45,7 @@ interface SleepDatabaseDAO {
      * 按降序排列的結果列表的第一個元素。用於LIMIT 1僅返回一個元素。
      */
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
-    suspend fun getTonight() : SleepNight?
+    suspend fun getTonight(): SleepNight?
 
     /**
      * Selects and returns all rows in the table,

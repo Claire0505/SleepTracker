@@ -41,11 +41,11 @@ class SleepTrackerFragment : Fragment() {
         val sleepTrackerViewModel =
             ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
-        //將當前活動指定為綁定的生命週期所有者。以便綁定可以觀察LiveData更新。
-        binding.setLifecycleOwner(this)
-
         //若要將View Model與數據綁定一起使用，您必須顯式 ,給綁定對像一個引用。
         binding.sleepTrackerViewModel = sleepTrackerViewModel
+
+        //將當前活動指定為綁定的生命週期所有者。以便綁定可以觀察LiveData更新。
+        binding.setLifecycleOwner(this)
 
         // 在按下STOP按鈕時，在狀態變量上添加一個用於導航的Observer。
         sleepTrackerViewModel.navigateToSleepQuality.observe(this, Observer { night ->
