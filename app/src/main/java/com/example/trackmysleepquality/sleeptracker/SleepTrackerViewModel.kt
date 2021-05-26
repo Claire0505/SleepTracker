@@ -1,10 +1,7 @@
 package com.example.trackmysleepquality.sleeptracker
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.trackmysleepquality.database.SleepDatabaseDAO
 import com.example.trackmysleepquality.database.SleepNight
 import com.example.trackmysleepquality.formatNights
@@ -75,6 +72,8 @@ class SleepTrackerViewModel(
             val oldNight = tonight.value ?: return@launch
             oldNight.endTimeMilli = System.currentTimeMillis()
             update(oldNight)
+            // 設置狀態以導航到SleepQualityFragment
+            _navigateToSleepQuality.value = oldNight
         }
     }
 
@@ -94,5 +93,18 @@ class SleepTrackerViewModel(
 
     suspend fun clear() {
         database.clear()
+    }
+
+    /**
+     * 在中SleepTrackerViewModel，創建一個LiveData要在應用程序導航至時更改的SleepQualityFragment。
+     * 使用封裝僅將的可獲取版本暴露LiveData給ViewModel。
+     */
+    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+    val navigateToSleepQuality : LiveData<SleepNight>
+    get() = _navigateToSleepQuality
+
+    // 添加一個doneNavigating()函數來重置觸發導航的變量。
+    fun doneNavigating(){
+        _navigateToSleepQuality.value = null
     }
 }
