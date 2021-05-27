@@ -30,6 +30,60 @@ class SleepTrackerViewModel(
         nights -> formatNights(nights, application.resources)
     }
 
+    /**
+     * If tonight has not been set, then the START button should be visible.
+     */
+    val startButtonVisible = Transformations.map(tonight) {
+        null == it
+    }
+
+    /**
+     * If tonight has been set, then the STOP button should be visible.
+     */
+    val stopButtonVisible = Transformations.map(tonight) {
+        null != it
+    }
+
+    /**
+     * If there are any nights in the database, show the CLEAR button.
+     */
+    val clearButtonVisible = Transformations.map(nights) {
+        it?.isNotEmpty()
+    }
+
+    /**
+     * Request a toast by setting this value to true.
+     * This is private because we don't want to expose setting this value to the Fragment.
+     */
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+    /**
+     * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
+     */
+    val showSnackbarEvent : LiveData<Boolean>
+    get() = _showSnackbarEvent
+
+    /**
+     * Call this immediately after calling `show()` on a toast.
+     * It will clear the toast request, so if the user rotates their phone it won't show a duplicate
+     * toast.
+     */
+    fun doneShowingSnackbar(){
+        _showSnackbarEvent.value = false
+    }
+
+    /**
+     * 在中SleepTrackerViewModel，創建一個LiveData要在應用程序導航至時更改的SleepQualityFragment。
+     * 使用封裝僅將的可獲取版本暴露LiveData給ViewModel。
+     */
+    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+    val navigateToSleepQuality : LiveData<SleepNight>
+        get() = _navigateToSleepQuality
+
+    // 添加一個doneNavigating()函數來重置觸發導航的變量。
+    fun doneNavigating(){
+        _navigateToSleepQuality.value = null
+    }
+
     // 要tonight盡快初始化變量，請init在tonight和的定義下方創建一個塊initializeTonight()。
     init {
         initializeTonight()
@@ -104,23 +158,11 @@ class SleepTrackerViewModel(
         viewModelScope.launch {
             clear()
             tonight.value = null
+            _showSnackbarEvent.value = true
         }
     }
 
     suspend fun clear() {
         database.clear()
-    }
-
-    /**
-     * 在中SleepTrackerViewModel，創建一個LiveData要在應用程序導航至時更改的SleepQualityFragment。
-     * 使用封裝僅將的可獲取版本暴露LiveData給ViewModel。
-     */
-    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
-    val navigateToSleepQuality : LiveData<SleepNight>
-    get() = _navigateToSleepQuality
-
-    // 添加一個doneNavigating()函數來重置觸發導航的變量。
-    fun doneNavigating(){
-        _navigateToSleepQuality.value = null
     }
 }

@@ -23,6 +23,7 @@
         <Button
             android:id="@+id/start_button"
             android:onClick="@{() -> sleepTrackerViewModel.onStartTracking()}"
+            android:enabled="@{sleepTrackerViewModel.startButtonVisible}"
             style="@style/SleepButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +57,7 @@
         <Button
             android:id="@+id/stop_button"
             android:onClick="@{() -> sleepTrackerViewModel.onStopTracking()}"
+            android:enabled="@{sleepTrackerViewModel.stopButtonVisible}"
             style="@style/SleepButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,6 +71,7 @@
         <Button
             android:id="@+id/clear_button"
             android:onClick="@{() -> sleepTrackerViewModel.onClear()}"
+            android:enabled="@{sleepTrackerViewModel.clearButtonVisible}"
             style="@style/SleepButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
