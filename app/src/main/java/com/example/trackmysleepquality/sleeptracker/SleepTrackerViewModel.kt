@@ -23,7 +23,7 @@ class SleepTrackerViewModel(
     private var tonight = MutableLiveData<SleepNight?>()
 
     // 定義一個名為的變量nights。從數據庫獲取所有夜晚，並將其分配給nights變量。
-    private val nights = database.getAllNights()
+    val nights = database.getAllNights()
 
     // 在的定義下方nights，添加代碼以轉換nights為nightsString。使用中的formatNights()功能Util.kt。
     val nightString = Transformations.map(nights){

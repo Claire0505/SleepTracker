@@ -49,7 +49,7 @@ class SleepTrackerFragment : Fragment() {
         binding.setLifecycleOwner(this)
 
         // 在按下STOP按鈕時，在狀態變量上添加一個用於導航的Observer。
-        sleepTrackerViewModel.navigateToSleepQuality.observe(this, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
                 // We need to get the navController from this, because button is not ready, and it
                 // just has to be a view. For some reason, this only matters if we hit stop again
@@ -69,7 +69,7 @@ class SleepTrackerFragment : Fragment() {
 
         // Add an Observer on the state variable for showing a Snackbar message
         // when the CLEAR button is pressed.
-        sleepTrackerViewModel.showSnackbarEvent.observe(this, Observer {
+        sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
             if ( it == true){
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
@@ -80,6 +80,20 @@ class SleepTrackerFragment : Fragment() {
                 sleepTrackerViewModel.doneShowingSnackbar()
             }
         })
+
+        /**
+         * RecycleView
+         * 通過提供片段的viewLifecycleOwner生命週期所有者，您可以確保該觀察者僅RecyclerView在屏幕上處於活動狀態時才處於活動狀態。
+         * 在觀察器內部，只要獲得非null值（for nights），就將該值分配給適配器的data。
+         */
+        val adapter = SleepNightAdapter()
+        binding.sleepRvList.adapter = adapter
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
 
         return binding.root
     }
