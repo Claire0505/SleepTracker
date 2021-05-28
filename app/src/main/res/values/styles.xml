@@ -2,8 +2,8 @@
 <resources>
     <style name="SleepButtons" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/white_text_color</item>
-        <item name="colorAccent">@color/purple_color</item>
-        <item name="colorControlHighlight">@color/purple_color</item>
+        <item name="colorAccent">@color/green_color</item>
+        <item name="colorControlHighlight">@color/green_color</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
