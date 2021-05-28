@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+將databind 數據綁定添加到佈局文件
+要強制創建Binding對象，請選擇“構建”>“清理項目”，然後選擇“構建”>“重建項目”。
+（如果仍然有問題，請選擇“文件”>“使緩存無效/重新啟動”。）
+將ListItemSleepNightBinding綁定對像以及相關代碼添加到項目的生成文件中。
+-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/quality_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/quality_sleep_image"
-        tools:srcCompat="@drawable/ic_sleep_5" />
+    <data>
+        <variable
+            name="sleep"
+            type="com.example.trackmysleepquality.database.SleepNight" />
+    </data>
 
-    <TextView
-        android:id="@+id/sleep_tv_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        tools:text="@string/quality_date"
-        app:layout_constraintStart_toEndOf="@+id/quality_image"
-        app:layout_constraintTop_toTopOf="@+id/quality_image" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/quality_tv_string"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        tools:text="Excellent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/sleep_tv_length"
-        app:layout_constraintTop_toBottomOf="@+id/sleep_tv_length" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/quality_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/quality_sleep_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/ic_sleep_5" />
+
+        <TextView
+            android:id="@+id/sleep_tv_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/quality_image"
+            app:layout_constraintTop_toTopOf="@+id/quality_image"
+            tools:text="@string/quality_date" />
+
+        <TextView
+            android:id="@+id/quality_tv_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/sleep_tv_length"
+            app:layout_constraintTop_toBottomOf="@+id/sleep_tv_length"
+            tools:text="Excellent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
