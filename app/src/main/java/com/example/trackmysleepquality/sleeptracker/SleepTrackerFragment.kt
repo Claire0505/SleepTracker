@@ -86,11 +86,25 @@ class SleepTrackerFragment : Fragment() {
          * 通過提供片段的viewLifecycleOwner生命週期所有者，您可以確保該觀察者僅RecyclerView在屏幕上處於活動狀態時才處於活動狀態。
          * 在觀察器內部，只要獲得非null值（for nights），就將該值分配給適配器的data。
          */
-        val adapter = SleepNightAdapter()
-        binding.sleepRvList.adapter = adapter
+
+//        val adapter = SleepNightAdapter()
+//        binding.sleepRvList.adapter = adapter
+//        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                adapter.data = it
+//            }
+//        })
+
+       /**
+        * ListAdapter提供了一種稱為的方法，submitList()用於告訴您ListAdapter列表的新版本可用。
+        * 調用此方法時，ListAdapterdiff將新列表與舊列表進行比較，並檢測添加，刪除，移動或更改的項目。
+        * 然後ListAdapter更新由表示的項目RecyclerView。
+        */
+        val listAdapter = SleepNightListAdapter()
+        binding.sleepRvList.adapter = listAdapter
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                listAdapter.submitList(it)
             }
         })
 
