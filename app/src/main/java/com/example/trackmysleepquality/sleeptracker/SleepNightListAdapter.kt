@@ -28,23 +28,9 @@ class SleepNightListAdapter  : ListAdapter<SleepNight,
         : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: SleepNight) {
-            val res = itemView.context.resources
-            binding.sleepTvLength.text =
-                convertDurationToFormatted(item.startTimeMilli, item.endTimeMilli, res)
-
-            binding.qualityTvString.text = convertNumericQualityToString(item.sleepQuality, res)
-
-            binding.qualityImage.setImageResource(
-                when (item.sleepQuality) {
-                    0 -> R.drawable.ic_sleep_0
-                    1 -> R.drawable.ic_sleep_1
-                    2 -> R.drawable.ic_sleep_2
-                    3 -> R.drawable.ic_sleep_3
-                    4 -> R.drawable.ic_sleep_4
-                    5 -> R.drawable.ic_sleep_5
-                    else -> R.drawable.ic_sleep_active
-                }
-            )
+            binding.sleep = item
+            // 添加binding.executePendingBindings()。此調用是一種優化，它要求數據綁定立即執行任何未決的綁定。
+            binding.executePendingBindings()
         }
 
         companion object {
