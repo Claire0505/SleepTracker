@@ -9,15 +9,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--添加一個新變量以SleepNightListener通過數據綁定使類可用 -->
     <data>
         <variable
             name="sleep"
             type="com.example.trackmysleepquality.database.SleepNight" />
+        
+        <variable
+            name="clickListener"
+            type="com.example.trackmysleepquality.sleeptracker.SleepNightListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(sleep)}">
 
         <!--
         在中ImageView，添加app與設置圖像的綁定適配器同名的屬性。傳遞sleep變量

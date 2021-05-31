@@ -5,14 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trackmysleepquality.R
-import com.example.trackmysleepquality.convertDurationToFormatted
-import com.example.trackmysleepquality.convertNumericQualityToString
 import com.example.trackmysleepquality.database.SleepNight
 import com.example.trackmysleepquality.databinding.ListItemSleepNightBinding
 
 // SleepNightDiffCallback()作為參數添加到構造函數。在ListAdapter將使用它來找出在列表中發生了什麼變化。
-class SleepNightListAdapter  : ListAdapter<SleepNight,
+class SleepNightListAdapter (val clickListener: SleepNightListener)  : ListAdapter<SleepNight,
         SleepNightListAdapter.MyViewHolder>(SleepNightDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -20,15 +17,16 @@ class SleepNightListAdapter  : ListAdapter<SleepNight,
     }
 
     override fun onBindViewHolder(myholder: MyViewHolder, position: Int) {
-        val item = getItem(position)
-        myholder.bind(item)
+        myholder.bind(getItem(position)!!, clickListener)
     }
 
     class MyViewHolder private constructor(val binding: ListItemSleepNightBinding)
         : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: SleepNight) {
+        fun bind(item: SleepNight, clickListener: SleepNightListener) {
             binding.sleep = item
+            // 將單擊偵聽器分配給函數binding內部的對象bind()
+            binding.clickListener = clickListener
             // 添加binding.executePendingBindings()。此調用是一種優化，它要求數據綁定立即執行任何未決的綁定。
             binding.executePendingBindings()
         }
@@ -66,4 +64,13 @@ class SleepNightListAdapter  : ListAdapter<SleepNight,
 
     }
 
+}
+
+/**
+ *  創建一個點擊監聽器並從item佈局中觸發它
+ *  處理點擊的回調應該有一個有用的標識符名稱。使用clickListener作為其名稱。
+ *  該clickListener回調只需要night.nightId從數據庫中存取數據。
+ */
+class SleepNightListener(val clickListener: (sleepId : Long) -> Unit){
+    fun onClick(night: SleepNight) = clickListener(night.nightId)
 }
