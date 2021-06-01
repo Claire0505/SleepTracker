@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trackmysleepquality.R
 import com.example.trackmysleepquality.database.SleepNight
 import com.example.trackmysleepquality.databinding.ListItemSleepNightBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // 這RecyclerView將需要區分每個項目的視圖類型，以便它可以正確地為其分配一個視圖持有者。
 private val ITEM_VIEW_TYPE_HEADER = 0
@@ -18,13 +22,20 @@ private val ITEM_VIEW_TYPE_ITEM = 1
 class SleepNightListAdapter(val clickListener: SleepNightListener) : ListAdapter<DataItem,
         RecyclerView.ViewHolder>(SleepNightDiffCallback()) {
 
+    // 使用協程進行列表操作 Use coroutines for list manipulations
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+
     // 將使用此函數添加標題，然後提交列表，而不是使用submitList()提供的ListAdapter來提交您的列表。
     fun addHeaderAndSubmitList(list: List<SleepNight>?) {
-        val items = when(list){
-            null -> listOf(DataItem.Header)
-            else -> listOf(DataItem.Header) + list.map { DataItem.SleepNightItem(it) }
+        adapterScope.launch {
+            val items = when (list) {
+                null -> listOf(DataItem.Header)
+                else -> listOf(DataItem.Header) + list.map { DataItem.SleepNightItem(it) }
+            }
+            withContext(Dispatchers.Main) {
+                submitList(items)
+            }
         }
-        submitList(items)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
