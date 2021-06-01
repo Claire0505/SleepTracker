@@ -165,4 +165,20 @@ class SleepTrackerViewModel(
     suspend fun clear() {
         database.clear()
     }
+
+    private val _navigateToSleepDetail = MutableLiveData<Long>()
+    val navigateToSleepDetail
+        get() = _navigateToSleepDetail
+
+    /**
+     * 創建onSleepNightClicked()點擊處理函數。
+     */
+    fun onSleepNightClicked(id :Long){
+        _navigateToSleepDetail.value = id
+    }
+
+    // 定義應用程序完成導航後要調用的方法。調用它onSleepDetailNavigated()並將其值設置為null。
+    fun onSleepDetailNavigated(){
+        _navigateToSleepDetail.value = null
+    }
 }

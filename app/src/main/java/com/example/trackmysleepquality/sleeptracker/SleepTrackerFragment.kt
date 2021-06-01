@@ -57,13 +57,6 @@ class SleepTrackerFragment : Fragment() {
         // 在按下STOP按鈕時，在狀態變量上添加一個用於導航的Observer。
         sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
-                // We need to get the navController from this, because button is not ready, and it
-                // just has to be a view. For some reason, this only matters if we hit stop again
-                // after using the back button, not if we hit stop and choose a quality.
-                // Also, in the Navigation Editor, for Quality -> Tracker, check "Inclusive" for
-                // popping the stack to get the correct behavior if we press stop multiple times
-                // followed by back.
-                // Also: https://stackoverflow.com/questions/28929637/difference-and-uses-of-oncreate-oncreateview-and-onactivitycreated-in-fra
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
                         .actionSleepTrackerFragmentToSleepQualityFragment(night.nightId))
@@ -88,6 +81,18 @@ class SleepTrackerFragment : Fragment() {
         })
 
         /**
+         *  當navigateToSleepDetail更改時，導航到SleepDetailFragment，傳入night，
+         *  然後調用onSleepDetailNavigated()。
+         */
+        sleepTrackerViewModel.navigateToSleepDetail.observe(viewLifecycleOwner, Observer {
+            night -> night?.let {
+                this.findNavController().navigate(SleepTrackerFragmentDirections
+                    .actionSleepTrackerFragmentToSleepDetailFragment(night))
+            sleepTrackerViewModel.onSleepDetailNavigated()
+        }
+        })
+
+        /**
          * RecycleView
          * 通過提供片段的viewLifecycleOwner生命週期所有者，您可以確保該觀察者僅RecyclerView在屏幕上處於活動狀態時才處於活動狀態。
          * 在觀察器內部，只要獲得非null值（for nights），就將該值分配給適配器的data。
@@ -106,16 +111,18 @@ class SleepTrackerFragment : Fragment() {
         * 調用此方法時，ListAdapterdiff將新列表與舊列表進行比較，並檢測添加，刪除，移動或更改的項目。
         * 然後ListAdapter更新由表示的項目RecyclerView。
         */
+       // 添加調用點擊處理程序
         val listAdapter = SleepNightListAdapter(SleepNightListener { nightId ->
-           Toast.makeText(context, "${nightId}", Toast.LENGTH_LONG).show()
+           //Toast.makeText(context, "${nightId}", Toast.LENGTH_LONG).show()
+           sleepTrackerViewModel.onSleepNightClicked(nightId)
        })
         binding.sleepRvList.adapter = listAdapter
+
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {
                 listAdapter.submitList(it)
             }
         })
-
 
         return binding.root
     }
