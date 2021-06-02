@@ -33,10 +33,6 @@ class SleepTrackerFragment : Fragment() {
             R.layout.fragment_sleep_tracker, container, false
         )
 
-        // GridLayoutManager
-        val manager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
-        binding.sleepRvList.layoutManager = manager
-
         val application = requireNotNull(this.activity).application
 
         // Create an instance of the ViewModel Factory. 要獲取對數據庫DAO的引用
@@ -123,6 +119,21 @@ class SleepTrackerFragment : Fragment() {
                 listAdapter.addHeaderAndSubmitList(it)
             }
         })
+
+        // 要修復標題寬度，您需要告訴GridLayoutManager何時跨所有列跨越數據。
+        // 您可以通過SpanSizeLookup在GridLayoutManager.
+        // 這是一個配置對象，GridLayoutManager用於確定列表中每個項目使用的跨度數。
+        val manager = GridLayoutManager(activity, 3)
+
+        // getSpanSize()，返回每個位置的正確跨度大小。位置 0 的跨度大小為 3，其他位置的跨度大小為 1。
+        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int) =  when (position) {
+                0 -> 3
+                else -> 1
+            }
+        }
+
+        binding.sleepRvList.layoutManager = manager
 
         return binding.root
     }
